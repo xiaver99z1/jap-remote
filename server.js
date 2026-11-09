@@ -3,6 +3,12 @@ import http from "http";
 import { Server } from "socket.io";
 
 const app = express();
+
+// Health check route so you can easily verify Render is awake in your browser
+app.get("/", (req, res) => {
+  res.send("Signaling Server is live!");
+});
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: { origin: "*" },
@@ -29,6 +35,7 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(4000, "0.0.0.0", () => {
-  console.log("Signaling server running on port 4000");
+const PORT = process.env.PORT || 4000;
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`Signaling server running on port ${PORT}`);
 });
